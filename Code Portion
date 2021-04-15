@@ -1,1 +1,48 @@
-This is where we will upload the code.
+%% Group 8
+
+Qm =248.0; % gal/day
+Qn =1252.0; % gal/day
+dx =10.0; % m
+dy = dx;
+Hlower =383.0;
+Hupper =404.0;
+[NX,NY] =size(K);
+A =zeros(NX*NY,NX*NY);
+B =zeros(NX*NY,1);
+X =zeros(1,NX*NY);
+index_array =zeros(NX,NY);
+n =0;
+for j=1:NY
+    for i=1:NX
+        n = n +1;
+        index_array(i,j) = n;
+        X(1,n) = H(i,j);
+    end
+end
+for j=1:NY 
+    for i=1:NX 
+        row=index_array(i,j);
+        if j==1
+            B(row,1)=B(row,1)+(K(i,j)*Hlower/dy);
+            A(row,row)=A(row,row)+(K(i,j)/dy);
+        else
+            col=index_array(i,j-1);
+            A(row,col)=-sqrt(K(i,j)*K(i,j-1))/dy;
+            A(row,row)=A(row,row)+(sqrt(K(i,j)*K(i,j-1))/dy);
+        end
+        if i~=1
+            col=index_array(i-1,j);
+            A(row,col)=-sqrt(K(i,j)*K(i-1,j))/dx;
+            A(row,row)=A(row,row)+(sqrt(K(i,j)*K(i-1,j))/dx);
+            
+        end
+       
+        
+    end
+end
+        
+        
+        
+        
+        
+        
